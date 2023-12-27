@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Memory game</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <header>
+        <div class="left-side">
+            <div class="mistakes">Mistakes: 0</div>
+            <div class="moves">Moves: 2</div>
+            <div class="timer">00:12:12</div>
+        </div>
+        <div class="right-side">
+            <div></div>
+        </div>
+    </header>
+
+    <div id="gameContainer">
+        <div id="gameBody" data-game-lvl="16">
+            <div class="overlay" id="overlay"></div>
+            <button id="overlayButton" type="button">Play</button>
+            <div class="oneCard"><img src="./Cards/09462a668a4c8b5126d0c64c1c42169f.jpg" alt=""></div>
+            <div class="oneCard"><img src="./Cards/10-de-copas.png" alt=""></div>
+            <div class="oneCard"><img src="./Cards/1200px-Playing_card_club_8.svg.png" alt=""></div>
+            <div class="oneCard"><img src="./Cards/1200px-Playing_card_spade_6.svg.png" alt=""></div>
+            <div class="oneCard"><img src="./Cards/190996-1024__12779.jpg" alt=""></div>
+            <div class="oneCard"><img src="./Cards/200px-Playing_card_diamond_9.svg.png" alt=""></div>
+            <div class="oneCard"><img src="./Cards/200px-Playing_card_heart_6.svg.png" alt=""></div>
+            <div class="oneCard"><img src="./Cards/200px-Playing_card_heart_7.svg.png" alt=""></div>
+            <div class="oneCard"><img src="./Cards/32651166-jack-of-diamonds-playing-card.jpg" alt=""></div>
+        </div>
+
+        <div id="gameSettings">
+            <div id="levelSettings">
+                <div>Level: </div>
+                <div>
+                    <button class="gameLvlBtn activeBtn" gameLvl="16">4x4</button>
+                    <button class="gameLvlBtn" gameLvl="20">5x4</button>
+                    <button class="gameLvlBtn" gameLvl="25">5x5</button>
+                    <button class="gameLvlBtn" gameLvl="30">6x5</button>
+                </div>
+            </div>
+            <div id="speedSettings">
+                <div>Speed:</div>
+                <div>
+                    <div>Fast</div>
+                    <div>Standart</div>
+                    <div>Slow</div>
+                    <div>Very slow</div>
+                </div>
+            </div>  
+
+        </div>
+    </div>
+
+
+    <script src="./script.js"></script>
+</body>
+
+</html>

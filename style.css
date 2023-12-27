@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0px;
+    padding: 0px;
+}
+
+header {
+    background-color: gray;
+    height: 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.left-side {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.left-side>div {
+    width: 100%;
+    height: 80%;
+    min-width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    margin: 0px 15px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+#gameContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px 5%;
+}
+
+#gameBody {
+    position: relative;
+    padding: 10px;
+    gap: 10px;
+    display: grid;
+    max-height: 80vh;
+}
+#gameBody[data-game-lvl="16"] {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+#gameBody[data-game-lvl="20"] {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+#gameBody[data-game-lvl="25"] {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+}
+#gameBody[data-game-lvl="30"] {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+}
+
+.oneCard {
+    width: 100px;
+    height: 120px;
+    position: relative;
+    margin: 0px;
+    background: gray;
+    border-radius: 5px;
+}
+
+.oneCard img {
+    width: 100px;
+    height: 120px;
+    object-fit:fill;
+    display: block; 
+}
+
+#gameSettings {
+    width: 100%;
+}
+
+.overlay {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(169, 169, 169, 0.7);
+    z-index: 2;
+}
+
+#overlayButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+}
+
+.gameLvlBtn {
+    border-radius: 5px;
+    color: rgb(148,160,213);
+}
+.activeBtn {
+    background-color: rgb(78,23,169);
+    color: white;
+}
