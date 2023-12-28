@@ -1,55 +1,3 @@
-let $gameBodyGrid = $("#gameBody");
-
-// Check current game level from active level selector (default min level 4 x 4).
-// Result will be summ (4x4=16)
-let currentLvl = parseInt($('.activeBtn').attr('gameLvl'));
-
-// Event for setting actual game level
-$('.gameLvlBtn').on('click', function () {
-  let gameLvlValue = $(this).attr('gameLvl');
-  currentLvl = parseInt(gameLvlValue);
-  $('.gameLvlBtn').removeClass('activeBtn');
-  $(this).addClass('activeBtn');
-});
-
-//
-$("#overlayButton").on('click', function () {
-  var overlay = document.getElementById('overlay');
-  overlay.style.display = (overlay.style.display === 'none' || overlay.style.display === '') ? 'block' : 'none';
-  generateGameGrid();
-});
-
-// In depends on game level selector this function generates a game grid with the appropriate numbers of cells
-function generateGameGrid() {
-  $gameBodyGrid.children('.oneCard').remove();
-  $gameBodyGrid.attr('data-game-lvl', currentLvl);
-
-  let imagesForGame = shuffleImagePaths(imagePaths).slice(0, (currentLvl / 2)); // get random imges for game
-  imagesForGame = shuffleImagePaths(imagesForGame.concat(imagesForGame)); //each image mest be 2 times in game, shuffle images second time
-
-  let divs = [];
-  
-  for (let i = 0; i < currentLvl; i++) {
-    let placeholderDiv = document.createElement('div');
-    placeholderDiv.classList.add('oneCard');
-    $gameBodyGrid.append(placeholderDiv);
-  }
-  
-  for (let i = 0; i < currentLvl; i++) {
-    let element = document.createElement('div');
-    element.classList.add('oneCard');
-    let img = document.createElement('img');
-    let imgPath = imagesForGame.pop();
-    img.setAttribute('src', imgPath);
-
-    element.prepend(img);
-    divs.push(element);
-  }
-
-  // $gameBodyGrid.append(divs);
-}
-
-
 let imagePaths = [];
 imagePaths.push('./Cards/10-de-copas.png');
 imagePaths.push('./Cards/200px-Playing_card_diamond_9.svg.png');
@@ -75,19 +23,110 @@ imagePaths.push('./Cards/istockphoto-502944230-612x612.jpg');
 imagePaths.push('./Cards/jack-clubs-playing-card-isolated-white-clipping-path-included-jack-clubs-playing-card-isolated-white-173562459.jpg');
 imagePaths.push('./Cards/king-of-diamonds-card-AERYA3.jpg');
 
+let $gameBodyGrid = $("#gameBody");
+let $generalOverlay = document.getElementById('overlay');
+let $overlayBtn = document.getElementById('overlayButton');
+let openedCards = [];
+let divs = [];
+let imagesForGame = [];
+
+function resubscribeCardsOnEvent() {
+  $('.oneCard').on('click', openOneCard)
+};
+
+function unsubscribeCard(index) {
+  $('#gameBody .oneCard').eq(index).off('click', openOneCard);
+}
+
+function compareIsTheSameTwoCards(index1, index2) {
+  return imagesForGame[index1].getAttribute('src') == imagesForGame[index2].getAttribute('src');
+}
+
 // Function for shuffle array
 function shuffleImagePaths(array) {
   const shuffledArray = [...array];
   function compareRandom() {
-      return Math.random() - 0.5;
+    return Math.random() - 0.5;
   }
   shuffledArray.sort(compareRandom);
   return shuffledArray;
 }
 
-function displayImages() {
-  const images = imagePaths.map(path => `<div><img src="${path}" alt="Card Image"></div>`);
+$("#overlayButton").on('click', function () {
+  $generalOverlay.style.display = 'none';
+  $overlayBtn.style.display = 'none';
+  generateGameGrid();
+});
 
-  $gameBodyGrid.html(images.join(''));
+// Check current game level from active level selector (default min level 4 x 4).
+// Result will be summ (4x4=16)
+let currentLvl = parseInt($('.activeBtn').attr('gameLvl'));
+// Event for setting actual game level
+$('.gameLvlBtn').on('click', function () {
+  let gameLvlValue = $(this).attr('gameLvl');
+  currentLvl = parseInt(gameLvlValue);
+  $('.gameLvlBtn').removeClass('activeBtn');
+  $(this).addClass('activeBtn');
+});
+
+// In depends on game level selector this function generates a game grid with the appropriate numbers of cells
+function generateGameGrid() {
+  $gameBodyGrid.children('.oneCard').remove();
+  $gameBodyGrid.attr('data-game-lvl', currentLvl);
+
+  for (let i = 0; i < currentLvl; i++) {
+    let placeholderDiv = document.createElement('div');
+    placeholderDiv.classList.add('oneCard');
+    $gameBodyGrid.append(placeholderDiv);
+  }
+  prepareImgForRound(currentLvl);
+  resubscribeCardsOnEvent()
 }
-// displayImages();
+
+function prepareImgForRound(size) {
+  imagesForGame = [];
+  let imagePathsForRound = shuffleImagePaths(imagePaths).slice(0, (currentLvl / 2)); // get random imges for game
+  imagePathsForRound = shuffleImagePaths(imagePathsForRound.concat(imagePathsForRound)); //each image mest be 2 times in game, shuffle images second time
+  for (let i = 0; i < currentLvl; i++) {
+    let img = document.createElement('img');
+    let imgPath = imagePathsForRound.pop();
+    img.setAttribute('src', imgPath);
+    imagesForGame.push(img);
+  }
+}
+
+
+
+// -------------------------------------------------------------------------------------------------------------------
+function openOneCard(event) {
+  let clickedElement = event.target;
+  let index = $('#gameBody .oneCard').index(clickedElement);
+  console.log('Натискання на елемент індексом:', index);
+  if (2 <= openedCards.length || openedCards.includes(index)) return;
+  openedCards.push(index);
+  openImageInElement(index);
+  
+  if (2 == openedCards.length && compareIsTheSameTwoCards(openedCards[0], openedCards[1])) {
+    unsubscribeCard(openedCards[0]);
+    unsubscribeCard(openedCards[1]);
+    openedCards = [];
+  }
+  else if (2 == openedCards.length) {
+    setTimeout(function () {
+      closeImageInElement(openedCards[0]);
+      closeImageInElement(openedCards[1]);
+      openedCards = [];
+    }, 2000);
+  }
+}
+
+function openImageInElement(index) {
+  let $imageElement = $(imagesForGame[index]);
+  $('#gameBody .oneCard').eq(index).append($imageElement);
+}
+
+function closeImageInElement(index) {
+  $('#gameBody .oneCard').eq(index).empty();
+}
+
+
