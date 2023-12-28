@@ -31,7 +31,8 @@ let imagesForGame = [];
 let guessedPairs = 0;
 // Check current game level from active level selector (default min level 4 x 4).
 // Result will be summ (4x4=16)
-let currentLvl = parseInt($('.activeBtn').attr('gameLvl'));
+let currentLvl = parseInt($('#levelSettings .settingActiveBtn').attr('gameLvl'));
+let currentSpeed = parseInt($('#speedSettings .settingActiveBtn').attr('speed'));
 
 function resubscribeCardsOnEvent() {
   $('.oneCard').on('click', openOneCard)
@@ -55,19 +56,20 @@ function shuffleImagePaths(array) {
   return shuffledArray;
 }
 
-$("#overlayButton").on('click', function () {
-  clearDataBeforeNewGame();
-  $generalOverlay.style.display = 'none';
-  $overlayBtn.style.display = 'none';
-  generateGameGrid();
-});
-
 // Event for setting actual game level
-$('.gameLvlBtn').on('click', function () {
+$('#levelSettings .settingBtn').on('click', function () {
   let gameLvlValue = $(this).attr('gameLvl');
   currentLvl = parseInt(gameLvlValue);
-  $('.gameLvlBtn').removeClass('activeBtn');
-  $(this).addClass('activeBtn');
+  $('#levelSettings .settingBtn').removeClass('settingActiveBtn');
+  $(this).addClass('settingActiveBtn');
+});
+
+// Event for setting actual speed
+$('#speedSettings .settingBtn').on('click', function () {
+  let gameLvlValue = $(this).attr('speed');
+  currentSpeed = parseInt(gameLvlValue);
+  $('#speedSettings .settingBtn').removeClass('settingActiveBtn');
+  $(this).addClass('settingActiveBtn');
 });
 
 // In depends on game level selector this function generates a game grid with the appropriate numbers of cells
@@ -96,9 +98,16 @@ function prepareImgForRound(size) {
   }
 }
 
-
-
 // -------------------------------------------------------------------------------------------------------------------
+
+// START GAME BUTTON
+$("#overlayButton").on('click', function () {
+  clearDataBeforeNewGame();
+  $generalOverlay.style.display = 'none';
+  $overlayBtn.style.display = 'none';
+  generateGameGrid();
+});
+
 function openOneCard(event) {
   let clickedElement = event.target;
   let index = $('#gameBody .oneCard').index(clickedElement);
@@ -117,7 +126,7 @@ function openOneCard(event) {
       closeImageInElement(openedCards[0]);
       closeImageInElement(openedCards[1]);
       openedCards = [];
-    }, 2000);
+    }, currentSpeed);
   }
   if (guessedPairs === currentLvl / 2) {
     $generalOverlay.style.display = 'block';

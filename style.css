@@ -100,11 +100,11 @@ header {
     z-index: 3;
 }
 
-.gameLvlBtn {
+.settingBtn {
     border-radius: 5px;
     color: rgb(148,160,213);
 }
-.activeBtn {
+.settingActiveBtn {
     background-color: rgb(78,23,169);
     color: white;
 }
