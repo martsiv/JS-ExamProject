@@ -27,8 +27,11 @@ let $gameBodyGrid = $("#gameBody");
 let $generalOverlay = document.getElementById('overlay');
 let $overlayBtn = document.getElementById('overlayButton');
 let openedCards = [];
-let divs = [];
 let imagesForGame = [];
+let guessedPairs = 0;
+// Check current game level from active level selector (default min level 4 x 4).
+// Result will be summ (4x4=16)
+let currentLvl = parseInt($('.activeBtn').attr('gameLvl'));
 
 function resubscribeCardsOnEvent() {
   $('.oneCard').on('click', openOneCard)
@@ -53,14 +56,12 @@ function shuffleImagePaths(array) {
 }
 
 $("#overlayButton").on('click', function () {
+  clearDataBeforeNewGame();
   $generalOverlay.style.display = 'none';
   $overlayBtn.style.display = 'none';
   generateGameGrid();
 });
 
-// Check current game level from active level selector (default min level 4 x 4).
-// Result will be summ (4x4=16)
-let currentLvl = parseInt($('.activeBtn').attr('gameLvl'));
 // Event for setting actual game level
 $('.gameLvlBtn').on('click', function () {
   let gameLvlValue = $(this).attr('gameLvl');
@@ -101,15 +102,15 @@ function prepareImgForRound(size) {
 function openOneCard(event) {
   let clickedElement = event.target;
   let index = $('#gameBody .oneCard').index(clickedElement);
-  console.log('Натискання на елемент індексом:', index);
   if (2 <= openedCards.length || openedCards.includes(index)) return;
   openedCards.push(index);
   openImageInElement(index);
-  
+
   if (2 == openedCards.length && compareIsTheSameTwoCards(openedCards[0], openedCards[1])) {
     unsubscribeCard(openedCards[0]);
     unsubscribeCard(openedCards[1]);
     openedCards = [];
+    ++guessedPairs;
   }
   else if (2 == openedCards.length) {
     setTimeout(function () {
@@ -117,6 +118,10 @@ function openOneCard(event) {
       closeImageInElement(openedCards[1]);
       openedCards = [];
     }, 2000);
+  }
+  if (guessedPairs === currentLvl / 2) {
+    $generalOverlay.style.display = 'block';
+    $overlayBtn.style.display = 'block';
   }
 }
 
@@ -129,4 +134,8 @@ function closeImageInElement(index) {
   $('#gameBody .oneCard').eq(index).empty();
 }
 
-
+function clearDataBeforeNewGame() {
+  openedCards = [];
+  imagesForGame = [];
+  guessedPairs = 0;
+}
