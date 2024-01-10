@@ -146,14 +146,15 @@ function openOneCard(event) {
   if (2 <= openedCards.length || openedCards.includes(index)) return;
   openedCards.push(index);
   openImageInElement(index);
-  ++gameObject.counterMoves;
   if (2 == openedCards.length && compareIsTheSameTwoCards(openedCards[0], openedCards[1])) {
+    ++gameObject.counterMoves;
+    ++guessedPairs;
     unsubscribeCard(openedCards[0]);
     unsubscribeCard(openedCards[1]);
     openedCards = [];
-    ++guessedPairs;
   }
   else if (2 == openedCards.length) {
+    ++gameObject.counterMoves;
     ++gameObject.counterMistakes;
     setTimeout(() => {
       closeImageInElement(openedCards[0]);
