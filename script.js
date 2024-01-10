@@ -66,14 +66,14 @@ class MemoryGame {
   }
   set counterMoves(value) {
     this._counterMoves = value;
-    $moves.text(this._counterMoves);
+    $moves.text(`Moves: ${this._counterMoves}`);
   }
   get counterMistakes() {
     return this._counterMistakes;
   }
   set counterMistakes(value) {
     this._counterMistakes = value;
-    $mistakes.text(this._counterMistakes);
+    $mistakes.text(`Mistakes: ${this._counterMistakes}`);
   }
 }
 let gameObject;
@@ -180,8 +180,8 @@ function clearDataBeforeNewGame() {
   imagesForGame = [];
   guessedPairs = 0;
   gameObject = null;
-  $moves.text("0");
-  $mistakes.text("0");
+  $moves.text("Moves: 0");
+  $mistakes.text("Mistakes: 0");
   $timer.text("00:00:00");
 }
 
